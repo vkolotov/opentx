@@ -1548,7 +1548,6 @@ void MainWindow::createMenus()
   helpMenu->addAction(contributorsAct);
 
   recentFilesMenu = new QMenu(this);
-  recentFilesMenu->setToolTipsVisible(true);
   for ( int i = 0; i < g.historySize(); ++i) {
     recentFileActs.append(recentFilesMenu->addAction(""));
     recentFileActs[i]->setVisible(false);
@@ -1680,17 +1679,21 @@ bool MainWindow::anyChildrenDirty()
 
 void MainWindow::updateRecentFileActions()
 {
+  //  Hide all document slots
+  for (int i=0 ; i < qMin(recentFileActs.size(), g.historySize()); i++) {
+    recentFileActs[i]->setVisible(false);
+  }
+
+  // Fill slots with content and unhide them
   QStringList files = g.recentFiles();
-  for (int i=0; i < recentFileActs.size(); i++) {
-    if (i < files.size() && !files.at(i).isEmpty()) {
-      recentFileActs[i]->setText(QFileInfo(files.at(i)).fileName());
-      recentFileActs[i]->setData(files.at(i));
-      recentFileActs[i]->setStatusTip(QDir::toNativeSeparators(files.at(i)));
-      recentFileActs[i]->setToolTip(recentFileActs[i]->statusTip());
+  int numRecentFiles = qMin(recentFileActs.size(), qMin(files.size(), g.historySize()));
+
+  for (int i=0; i < numRecentFiles; i++) {
+    QString text = strippedName(files[i]);
+    if (!text.trimmed().isEmpty()) {
+      recentFileActs[i]->setText(text);
+      recentFileActs[i]->setData(files[i]);
       recentFileActs[i]->setVisible(true);
-    }
-    else {
-      recentFileActs[i]->setVisible(false);
     }
   }
 }
