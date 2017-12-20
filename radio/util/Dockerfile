@@ -1,6 +1,6 @@
 # An Debian image for compiling OpenTX 2.2
 
-FROM debian:stretch
+FROM debian:jessie
 
 RUN apt-get update && \
     apt-get install -y \
