@@ -33,10 +33,15 @@ enum CalibrationState {
 
 void menuCommonCalib(event_t event)
 {
+  int16_t stickAna[NUM_STICKS];
+
   for (uint8_t i=0; i<NUM_STICKS+NUM_POTS+NUM_SLIDERS; i++) { // get low and high vals for sticks and trims
     int16_t vt = anaIn(i);
     reusableBuffer.calib.loVals[i] = min(vt, reusableBuffer.calib.loVals[i]);
     reusableBuffer.calib.hiVals[i] = max(vt, reusableBuffer.calib.hiVals[i]);
+    if (i < NUM_STICKS) {
+      stickAna[i] = vt;
+    }
     if (i >= POT1 && i <= POT_LAST) {
       if (IS_POT_WITHOUT_DETENT(i)) {
         reusableBuffer.calib.midVals[i] = (reusableBuffer.calib.hiVals[i] + reusableBuffer.calib.loVals[i]) / 2;
@@ -93,14 +98,24 @@ void menuCommonCalib(event_t event)
     case CALIB_START:
       // START CALIBRATION
       if (!READ_ONLY()) {
-        lcdDrawTextAlignedLeft(MENU_HEADER_HEIGHT+2*FH, STR_MENUTOSTART);
+        // lcdDrawTextAlignedLeft(MENU_HEADER_HEIGHT+2*FH, STR_MENUTOSTART);
       }
+
+      memclear(reusableBuffer.calib.sticks, sizeof(reusableBuffer.calib.sticks));
+      for (uint8_t stick=0; stick<2; stick++) {
+        lcdDrawNumber(stick*70, MENU_HEADER_HEIGHT+1*FH, g_eeGeneral.calibCorrection[stick].xmin);
+        lcdDrawNumber(stick*70+30, MENU_HEADER_HEIGHT+1*FH, g_eeGeneral.calibCorrection[stick].xmax);
+        lcdDrawNumber(stick*70, MENU_HEADER_HEIGHT+2*FH, g_eeGeneral.calibCorrection[stick].ymin);
+        lcdDrawNumber(stick*70+30, MENU_HEADER_HEIGHT+2*FH, g_eeGeneral.calibCorrection[stick].ymax);
+      }
+
       break;
 
     case CALIB_SET_MIDPOINT:
       // SET MIDPOINT
       lcdDrawText(0*FW, MENU_HEADER_HEIGHT+FH, STR_SETMIDPOINT, INVERS);
       lcdDrawTextAlignedLeft(MENU_HEADER_HEIGHT+2*FH, STR_MENUWHENDONE);
+
       for (uint8_t i=0; i<NUM_STICKS+NUM_POTS+NUM_SLIDERS; i++) {
         reusableBuffer.calib.loVals[i] = 15000;
         reusableBuffer.calib.hiVals[i] = -15000;
@@ -119,8 +134,8 @@ void menuCommonCalib(event_t event)
     case CALIB_MOVE_STICKS:
       // MOVE STICKS/POTS
       STICK_SCROLL_DISABLE();
-      lcdDrawText(0*FW, MENU_HEADER_HEIGHT+FH, STR_MOVESTICKSPOTS, INVERS);
-      lcdDrawTextAlignedLeft(MENU_HEADER_HEIGHT+2*FH, STR_MENUWHENDONE);
+      // lcdDrawText(0*FW, MENU_HEADER_HEIGHT+FH, STR_MOVESTICKSPOTS, INVERS);
+      // lcdDrawTextAlignedLeft(MENU_HEADER_HEIGHT+2*FH, STR_MENUWHENDONE);
       for (uint8_t i=0; i<NUM_STICKS+NUM_POTS+NUM_SLIDERS; i++) {
         if (abs(reusableBuffer.calib.loVals[i]-reusableBuffer.calib.hiVals[i]) > 50) {
           g_eeGeneral.calib[i].mid = reusableBuffer.calib.midVals[i];
@@ -130,6 +145,39 @@ void menuCommonCalib(event_t event)
           g_eeGeneral.calib[i].spanPos = v - v/STICK_TOLERANCE;
         }
       }
+      // stick left
+      {
+        int16_t x = stickAna[0] - g_eeGeneral.calib[0].mid;
+        int16_t y = stickAna[1] - g_eeGeneral.calib[1].mid;
+        uint8_t corner = (x < 0 ? 2 : 0) + (y < 0 ? 1 : 0);
+        uint32_t dist2 = x * x + y * y;
+        if (dist2 > reusableBuffer.calib.sticks[0].corners[corner].dist2) {
+          reusableBuffer.calib.sticks[0].corners[corner].x = x;
+          reusableBuffer.calib.sticks[0].corners[corner].y = y;
+          reusableBuffer.calib.sticks[0].corners[corner].dist2 = dist2;
+        }
+      }
+      // stick right
+      {
+        int16_t x = stickAna[3] - g_eeGeneral.calib[3].mid;
+        int16_t y = stickAna[2] - g_eeGeneral.calib[2].mid;
+        uint8_t corner = (x < 0 ? 2 : 0) + (y < 0 ? 1 : 0);
+        uint32_t dist2 = x * x + y * y;
+        if (dist2 > reusableBuffer.calib.sticks[1].corners[corner].dist2) {
+          reusableBuffer.calib.sticks[1].corners[corner].x = x;
+          reusableBuffer.calib.sticks[1].corners[corner].y = y;
+          reusableBuffer.calib.sticks[1].corners[corner].dist2 = dist2;
+        }
+      }
+
+      for (uint8_t stick=0; stick<2; stick++) {
+        for (uint8_t corner=0; corner<4; corner++) {
+          lcdDrawNumber(stick*64, MENU_HEADER_HEIGHT+corner*FH, reusableBuffer.calib.sticks[stick].corners[corner].x);
+          lcdDrawNumber(stick*64 + 30, MENU_HEADER_HEIGHT+corner*FH, reusableBuffer.calib.sticks[stick].corners[corner].y);
+        }
+      }
+
+
       break;
 
     case CALIB_STORE:
@@ -157,6 +205,14 @@ void menuCommonCalib(event_t event)
           }
         }
       }
+
+      for (uint8_t stick=0; stick<2; stick++) {
+        g_eeGeneral.calibCorrection[stick].xmin = reusableBuffer.calib.sticks[stick].corners[1].x - reusableBuffer.calib.sticks[stick].corners[0].x;
+        g_eeGeneral.calibCorrection[stick].xmax = reusableBuffer.calib.sticks[stick].corners[3].x - reusableBuffer.calib.sticks[stick].corners[2].x;
+        g_eeGeneral.calibCorrection[stick].ymin = reusableBuffer.calib.sticks[stick].corners[2].y - reusableBuffer.calib.sticks[stick].corners[0].y;
+        g_eeGeneral.calibCorrection[stick].ymax = reusableBuffer.calib.sticks[stick].corners[3].y - reusableBuffer.calib.sticks[stick].corners[1].y;
+      }
+
 #endif
       g_eeGeneral.chkSum = evalChkSum();
       storageDirty(EE_GENERAL);

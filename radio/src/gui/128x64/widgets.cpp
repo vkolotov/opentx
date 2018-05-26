@@ -24,10 +24,10 @@ void drawStick(coord_t centrex, int16_t xval, int16_t yval)
 {
 #define BOX_CENTERY   (LCD_H-9-BOX_WIDTH/2)
 #define MARKER_WIDTH  5
-  lcdDrawSquare(centrex-BOX_WIDTH/2, BOX_CENTERY-BOX_WIDTH/2, BOX_WIDTH);
-  lcdDrawSolidVerticalLine(centrex, BOX_CENTERY-1, 3);
-  lcdDrawSolidHorizontalLine(centrex-1, BOX_CENTERY, 3);
-  lcdDrawSquare(centrex + (xval/((2*RESX)/(BOX_WIDTH-MARKER_WIDTH))) - MARKER_WIDTH/2, BOX_CENTERY - (yval/((2*RESX)/(BOX_WIDTH-MARKER_WIDTH))) - MARKER_WIDTH/2, MARKER_WIDTH, ROUND);
+  // lcdDrawSquare(centrex-BOX_WIDTH/2, BOX_CENTERY-BOX_WIDTH/2, BOX_WIDTH);
+  lcdDrawSolidVerticalLine(centrex, BOX_CENTERY-1+10, 3);
+  lcdDrawSolidHorizontalLine(centrex-1, BOX_CENTERY+10, 3);
+  //lcdDrawSquare(centrex + (xval/((2*RESX)/(BOX_WIDTH-MARKER_WIDTH))) - MARKER_WIDTH/2, BOX_CENTERY - (yval/((2*RESX)/(BOX_WIDTH-MARKER_WIDTH))) - MARKER_WIDTH/2, MARKER_WIDTH, ROUND);
 #undef BOX_CENTERY
 #undef MARKER_WIDTH
 }

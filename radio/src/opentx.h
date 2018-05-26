@@ -1495,6 +1495,13 @@ union ReusableBuffer
   // 103 bytes
   struct
   {
+    struct {
+      struct {
+          int16_t x;
+          int16_t y;
+          uint32_t dist2;
+      } corners[4];
+    } sticks[2];
     int16_t midVals[NUM_STICKS+NUM_POTS+NUM_SLIDERS+NUM_MOUSE_ANALOGS];
     int16_t loVals[NUM_STICKS+NUM_POTS+NUM_SLIDERS+NUM_MOUSE_ANALOGS];
     int16_t hiVals[NUM_STICKS+NUM_POTS+NUM_SLIDERS+NUM_MOUSE_ANALOGS];
