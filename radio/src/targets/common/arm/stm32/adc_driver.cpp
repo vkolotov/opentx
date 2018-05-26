@@ -216,6 +216,18 @@ void adcRead()
     sticksPwmRead(adcValues);
   }
 #endif
+
+  {
+    if (adcValues[1] < g_eeGeneral.calib[1].mid)
+      adcValues[0] += g_eeGeneral.calibCorrection[0].xmin * ((g_eeGeneral.calib[1].spanNeg + adcValues[1]) / (2*RESX));
+    else
+      adcValues[0] += g_eeGeneral.calibCorrection[0].xmax * ((g_eeGeneral.calib[1].spanNeg + adcValues[1]) / (2*RESX));
+
+    if (adcValues[0] < g_eeGeneral.calib[0].mid)
+      adcValues[1] += g_eeGeneral.calibCorrection[1].xmin * ((g_eeGeneral.calib[0].spanNeg + adcValues[0]) / (2*RESX));
+    else
+      adcValues[1] += g_eeGeneral.calibCorrection[1].xmax * ((g_eeGeneral.calib[0].spanNeg + adcValues[0]) / (2*RESX));
+  }
 }
 
 // TODO
