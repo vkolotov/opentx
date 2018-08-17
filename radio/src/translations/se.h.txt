@@ -273,13 +273,7 @@
   #define TR_SF_TEST
 #endif
 
-#if defined(OVERRIDE_CHANNEL_FUNCTION) && LCD_W >= 212
-  #define TR_SF_SAFETY        "Säkra \0   "
-#else
-  #define TR_SF_SAFETY        "Säkra \0   "
-#else
-  #define TR_SF_SAFETY        "---\0      "
-#endif
+#define TR_SF_SAFETY        "Säkra \0   "
 
 #if defined(PCBTARANIS)
   #define TR_SF_SCREENSHOT    "Skärmbild"

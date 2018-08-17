@@ -506,7 +506,7 @@ int OpenTxFirmware::getCapability(::Capability capability)
       else
         return 16;
     case SafetyChannelCustomFunction:
-      return id.contains("nooverridech") ? 0 : 1;
+      return 1;
     case LogicalSwitches:
       if (IS_ARM(board))
         return 64;
@@ -1077,7 +1077,6 @@ QString OpenTxFirmware::getStampUrl()
 void addOpenTxCommonOptions(OpenTxFirmware * firmware)
 {
   firmware->addOption("ppmus", QCoreApplication::translate("Firmware", "Channel values displayed in us"));
-  firmware->addOption("nooverridech", QCoreApplication::translate("Firmware", "No OverrideCH functions available"));
   Option fai_options[] = {{"faichoice", QCoreApplication::translate("Firmware", "Possibility to enable FAI MODE (no telemetry) at field")},
                           {"faimode",   QCoreApplication::translate("Firmware", "FAI MODE (no telemetry) always enabled")},
                           {NULL}};
