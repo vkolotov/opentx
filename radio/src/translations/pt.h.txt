@@ -276,11 +276,7 @@
   #define TR_SF_TEST
 #endif
 
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
-  #define TR_SF_SAFETY        "Seguro\0      "
-#else
-  #define TR_SF_SAFETY        "---\0         "
-#endif
+#define TR_SF_SAFETY        "Seguro\0      "
 
 #if defined(PCBTARANIS)
   #define TR_SF_SCREENSHOT    "Screenshot"

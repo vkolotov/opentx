@@ -208,12 +208,10 @@ bool menuSpecialFunctions(event_t event, CustomFunctionData * functions, CustomF
         case ITEM_SPECIAL_FUNCTIONS_PARAM:
         {
           int8_t maxParam = MAX_OUTPUT_CHANNELS-1;
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
           if (func == FUNC_OVERRIDE_CHANNEL) {
             putsChn(MODEL_SPECIAL_FUNC_2ND_COLUMN_EXT, y, CFN_CH_INDEX(cfn)+1, attr);
           }
           else
-#endif
           if (func == FUNC_TRAINER) {
             maxParam = 4;
             drawSource(MODEL_SPECIAL_FUNC_2ND_COLUMN_EXT, y, CFN_CH_INDEX(cfn)==0 ? 0 : MIXSRC_Rud+CFN_CH_INDEX(cfn)-1, attr);
@@ -257,12 +255,10 @@ bool menuSpecialFunctions(event_t event, CustomFunctionData * functions, CustomF
             }
             if (active) INCDEC_ENABLE_CHECK(functions == g_eeGeneral.customFn ? isSourceAvailableInGlobalResetSpecialFunction : isSourceAvailableInResetSpecialFunction);
           }
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
           else if (func == FUNC_OVERRIDE_CHANNEL) {
             getMixSrcRange(MIXSRC_FIRST_CH, val_min, val_max);
             lcdDrawNumber(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, val_displayed, attr|LEFT);
           }
-#endif
 #if defined(DANGEROUS_MODULE_FUNCTIONS)
           else if (func >= FUNC_RANGECHECK && func <= FUNC_BIND) {
             val_max = NUM_MODULES-1;

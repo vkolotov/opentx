@@ -133,11 +133,9 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
   static rotenc_t rePreviousValues[ROTARY_ENCODERS];
 #endif
 
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
   for (uint8_t i=0; i<MAX_OUTPUT_CHANNELS; i++) {
     safetyCh[i] = OVERRIDE_CHANNEL_UNDEFINED;
   }
-#endif
 
 #if defined(GVARS)
   for (uint8_t i=0; i<NUM_TRIMS; i++) {
@@ -161,11 +159,9 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
 
         switch (CFN_FUNC(cfn)) {
 
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
           case FUNC_OVERRIDE_CHANNEL:
             safetyCh[CFN_CH_INDEX(cfn)] = CFN_PARAM(cfn);
             break;
-#endif
 
           case FUNC_TRAINER:
           {

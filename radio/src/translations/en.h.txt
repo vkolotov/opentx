@@ -278,12 +278,10 @@
   #define TR_SF_TEST
 #endif
 
-#if defined(OVERRIDE_CHANNEL_FUNCTION) && LCD_W >= 212
+#if LCD_W >= 212
   #define TR_SF_SAFETY                 "Override\0 "
-#elif defined(OVERRIDE_CHANNEL_FUNCTION)
-  #define TR_SF_SAFETY                 "Overr.\0   "
 #else
-  #define TR_SF_SAFETY                 "---\0      "
+  #define TR_SF_SAFETY                 "Overr.\0   "
 #endif
 
 #if defined(PCBTARANIS)

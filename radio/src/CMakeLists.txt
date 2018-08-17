@@ -24,7 +24,6 @@ option(GVARS "Global variables" ON)
 option(GUI "GUI enabled" ON)
 option(PPM_CENTER_ADJUSTABLE "PPM center adjustable" ON)
 option(PPM_LIMITS_SYMETRICAL "PPM limits symetrical" OFF)
-option(OVERRIDE_CHANNEL_FUNCTION "OverrideChannel function available" ON)
 option(DANGEROUS_MODULE_FUNCTIONS "Dangerous module functions (RangeCheck / Bind / Module OFF, etc.) available" OFF)
 option(FAI "Competition mode (no telemetry)" OFF)
 option(AUTOSOURCE "Automatic source detection in menus" ON)
@@ -267,10 +266,6 @@ endif()
 
 if(PPM_LIMITS_SYMETRICAL)
   add_definitions(-DPPM_LIMITS_SYMETRICAL)
-endif()
-
-if(OVERRIDE_CHANNEL_FUNCTION)
-  add_definitions(-DOVERRIDE_CHANNEL_FUNCTION)
 endif()
 
 if(DANGEROUS_MODULE_FUNCTIONS)

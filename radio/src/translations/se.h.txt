@@ -275,7 +275,7 @@
 
 #if defined(OVERRIDE_CHANNEL_FUNCTION) && LCD_W >= 212
   #define TR_SF_SAFETY        "Säkra \0   "
-#elif defined(OVERRIDE_CHANNEL_FUNCTION)
+#else
   #define TR_SF_SAFETY        "Säkra \0   "
 #else
   #define TR_SF_SAFETY        "---\0      "

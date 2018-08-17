@@ -37,9 +37,7 @@ uint16_t maxMixerDuration;
 
 uint8_t heartbeat;
 
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
 safetych_t safetyCh[MAX_OUTPUT_CHANNELS];
-#endif
 
 // __DMA for the MSC_BOT_Data member
 union ReusableBuffer reusableBuffer __DMA;

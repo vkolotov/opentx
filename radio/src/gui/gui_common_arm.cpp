@@ -421,17 +421,11 @@ bool isLogicalSwitchFunctionAvailable(int function)
 
 bool isAssignableFunctionAvailable(int function)
 {
-#if defined(OVERRIDE_CHANNEL_FUNCTION) || defined(GVARS)
   bool modelFunctions = (menuHandlers[menuLevel] == menuModelSpecialFunctions);
-#endif
 
   switch (function) {
     case FUNC_OVERRIDE_CHANNEL:
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
       return modelFunctions;
-#else
-      return false;
-#endif
     case FUNC_ADJUST_GVAR:
 #if defined(GVARS)
       return modelFunctions;

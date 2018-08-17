@@ -221,12 +221,10 @@ void menuSpecialFunctions(event_t event, CustomFunctionData * functions, CustomF
         case 2:
         {
           int8_t maxParam = MAX_OUTPUT_CHANNELS-1;
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
           if (func == FUNC_OVERRIDE_CHANNEL) {
             putsChn(lcdNextPos, y, CFN_CH_INDEX(cfn)+1, attr);
           }
           else
-#endif
           if (func == FUNC_TRAINER) {
             maxParam = 4;
             drawSource(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, CFN_CH_INDEX(cfn)==0 ? 0 : MIXSRC_Rud+CFN_CH_INDEX(cfn)-1, attr);
@@ -270,12 +268,10 @@ void menuSpecialFunctions(event_t event, CustomFunctionData * functions, CustomF
             }
             if (active) INCDEC_ENABLE_CHECK(functionsContext == &globalFunctionsContext ? isSourceAvailableInGlobalResetSpecialFunction : isSourceAvailableInResetSpecialFunction);
           }
-#if defined(OVERRIDE_CHANNEL_FUNCTION)
           else if (func == FUNC_OVERRIDE_CHANNEL) {
             getMixSrcRange(MIXSRC_FIRST_CH, val_min, val_max);
             lcdDrawNumber(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, val_displayed, attr|LEFT);
           }
-#endif // OVERRIDE_CHANNEL_FUNCTION
           else if (func >= FUNC_SET_FAILSAFE && func <= FUNC_BIND) {
             val_max = NUM_MODULES-1;
             lcdDrawTextAtIndex(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, "\004Int.Ext.", CFN_PARAM(cfn), attr);
