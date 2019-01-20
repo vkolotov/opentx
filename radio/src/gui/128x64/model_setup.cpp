@@ -265,7 +265,7 @@ void menuModelSetup(event_t event)
     INTERNAL_MODULE_CHANNELS_ROWS,
     IF_INTERNAL_MODULE_ON(HAS_RF_PROTOCOL_MODELINDEX(g_model.moduleData[INTERNAL_MODULE].rfProtocol) ? (uint8_t)2 : (uint8_t)1),
     IF_INTERNAL_MODULE_ON(FAILSAFE_ROWS(INTERNAL_MODULE)),
-    0, // Internal module status for timer
+    1, // Internal module status for timer
     ANTENNA_ROW
     LABEL(ExternalModule),
     EXTERNAL_MODULE_MODE_ROWS,
@@ -1200,11 +1200,14 @@ void menuModelSetup(event_t event)
           putsVolts(lcdLastRightPos, y, getBatteryVoltage(), attr | PREC2 | LEFT);
         }
         else if (IS_MODULE_XJT(moduleIdx)) {
-          lcdDrawTextAlignedLeft(y, "XJT Sync Time (uS)");
+          lcdDrawTextAlignedLeft(y, "XJT S/T (uS)");
           lcdDrawNumber(MODEL_SETUP_2ND_COLUMN, y, g_model.moduleData[moduleIdx].pxx.syncTime * 100/2, LEFT | attr);
-          lcdDrawNumber(MODEL_SETUP_2ND_COLUMN+3*FW, y, signed_diff_with_16bits_overflow(xjtHeartbeatCapture.pulsesTime, xjtHeartbeatCapture.heartBeatTime)/2, LEFT | attr);
-          lcdDrawNumber(MODEL_SETUP_2ND_COLUMN+8*FW+2, y,  xjtHeartbeatCapture.pulsesTime, LEFT | attr);
 
+          lcdDrawText(MODEL_SETUP_2ND_COLUMN+5*FW, y, "D");
+          lcdDrawNumber(MODEL_SETUP_2ND_COLUMN+6*FW+2, y, signed_diff_with_16bits_overflow(xjtHeartbeatCapture.pulsesTime, xjtHeartbeatCapture.heartBeatTime)/2, LEFT | attr);
+
+          lcdDrawText(MODEL_SETUP_2ND_COLUMN+5*FW, y + 9, "P");
+          lcdDrawNumber(MODEL_SETUP_2ND_COLUMN+6*FW+2, y + 9,  xjtHeartbeatCapture.pulsesTime, LEFT | attr);
 
           CHECK_INCDEC_MODELVAR(event, g_model.moduleData[moduleIdx].pxx.syncTime, 0, 255);
         }
